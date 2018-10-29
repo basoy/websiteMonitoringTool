@@ -1,5 +1,6 @@
 package com.serg.bash.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +13,8 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class GetWebsiteService {
 
-    private final RestTemplate restTemplate;
-
-    public GetWebsiteService(RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder.build();
-    }
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Async
     public CompletableFuture<Object> getWebsite(String subQuery) throws InterruptedException {

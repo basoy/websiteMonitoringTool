@@ -22,11 +22,12 @@ public class AppConfiguration {
     ProxyCustomizer proxyCustomizer;
 
     @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder builder) {
-        RestTemplate restTemplate = builder.additionalCustomizers(proxyCustomizer).build();
+    public RestTemplate restTemplate() {
+        RestTemplate restTemplate = new RestTemplate();
         List converters = new ArrayList<>();
         converters.add(httpMessageConverter());
         restTemplate.setMessageConverters(converters);
+        proxyCustomizer.customize(restTemplate);
         return restTemplate;
     }
 

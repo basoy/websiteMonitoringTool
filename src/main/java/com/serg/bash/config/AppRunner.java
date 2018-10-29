@@ -1,6 +1,7 @@
 package com.serg.bash.config;
 
 import com.serg.bash.service.GetWebsiteService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +10,7 @@ import java.util.concurrent.CompletableFuture;
 @Component
 public class AppRunner implements CommandLineRunner {
 
+    @Autowired
     private final GetWebsiteService getWebsiteService;
 
     public AppRunner(GetWebsiteService getWebsiteService) {
