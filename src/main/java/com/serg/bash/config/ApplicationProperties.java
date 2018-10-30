@@ -16,6 +16,7 @@ public class ApplicationProperties {
 
     private static final String PROXY_HOSTNAME = "proxyHostname";
     private static final String PROXY_PORT = "proxyPort";
+    private static final String USE_PROXY = "useProxy";
 
     public String PROXY_HOSTNAME() {
         return environment.getProperty(PROXY_HOSTNAME, String.class);
@@ -23,5 +24,9 @@ public class ApplicationProperties {
 
     public Integer PROXY_PORT() {
         return environment.getProperty(PROXY_PORT, Integer.class);
+    }
+
+    public Boolean USE_PROXY() {
+        return environment.getProperty(USE_PROXY, Boolean.class);
     }
 }

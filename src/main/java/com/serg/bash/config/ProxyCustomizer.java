@@ -25,17 +25,19 @@ public class ProxyCustomizer implements RestTemplateCustomizer {
 
     @Override
     public void customize(RestTemplate restTemplate) {
-        final String proxyUrl = properties.PROXY_HOSTNAME();
-        final int port = properties.PROXY_PORT();
+        if(properties.USE_PROXY()) {
+            final String proxyUrl = properties.PROXY_HOSTNAME();
+            final int port = properties.PROXY_PORT();
 
-        HttpHost proxy = new HttpHost(proxyUrl, port);
-        HttpClient httpClient = HttpClientBuilder.create().setRoutePlanner(new DefaultProxyRoutePlanner(proxy) {
-            @Override
-            protected HttpHost determineProxy(HttpHost target, HttpRequest request, HttpContext context)
-                    throws HttpException {
-                return super.determineProxy(target, request, context);
-            }
-        }).build();
-        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(httpClient));
+            HttpHost proxy = new HttpHost(proxyUrl, port);
+            HttpClient httpClient = HttpClientBuilder.create().setRoutePlanner(new DefaultProxyRoutePlanner(proxy) {
+                @Override
+                protected HttpHost determineProxy(HttpHost target, HttpRequest request, HttpContext context)
+                        throws HttpException {
+                    return super.determineProxy(target, request, context);
+                }
+            }).build();
+            restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(httpClient));
+        }
     }
 }

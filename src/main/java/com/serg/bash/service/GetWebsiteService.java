@@ -17,9 +17,8 @@ public class GetWebsiteService {
     private RestTemplate restTemplate;
 
     @Async
-    public CompletableFuture<Object> getWebsite(String subQuery) throws InterruptedException {
+    public CompletableFuture<Object> getWebsite(String url) throws InterruptedException {
         HttpStatus statusCode = null;
-        String url = String.format("https://www.google.com/search?q=%s", subQuery);
         try {
             ResponseEntity<Object> result = restTemplate.getForEntity(url, null);
             statusCode = result.getStatusCode();
