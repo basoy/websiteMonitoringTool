@@ -1,20 +1,23 @@
 package com.serg.bash.controller;
 
-import com.serg.bash.entity.Url;
+import com.serg.bash.entity.impl.Url;
 import com.serg.bash.service.UrlService;
+import com.serg.bash.util.MonitoringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-
 @RestController
 @RequestMapping("/")
-public class UrlController {
+public class MonitoringController {
 
     @Autowired
     private UrlService urlService;
+
+    @Autowired
+    private MonitoringUtils utils;
 
     @GetMapping
     public Flux<Url> findAll() {
@@ -24,11 +27,13 @@ public class UrlController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Url> createUrl(@RequestBody Url url) {
+        utils.addWebsiteToMonitoring(url);
         return urlService.createUrl(url);
     }
 
     @DeleteMapping("/delete/{id}")
     public Mono<Void> delete(@PathVariable String id) {
+        utils.deleteWebsiteFromMonitoring(urlService.findOne(id).block().getName());
         return urlService.delete(id);
     }
 }

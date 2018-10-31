@@ -1,6 +1,6 @@
 package com.serg.bash.repository;
 
-import com.serg.bash.entity.Url;
+import com.serg.bash.entity.impl.Url;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;
 

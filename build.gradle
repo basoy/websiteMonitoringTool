@@ -36,8 +36,7 @@ dependencies {
     compile group: 'org.projectlombok', name: 'lombok'
     compile("io.springfox:springfox-swagger-ui:2.6.1") //for documenting endpoints
     compile("io.springfox:springfox-swagger2:2.6.1")
-    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpasyncclient
-    compile group: 'org.apache.httpcomponents', name: 'httpasyncclient', version: '4.1.4'
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.6'
 
     runtime('org.springframework.boot:spring-boot-devtools')//for "hot deploy" our app and configuring global settings
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'

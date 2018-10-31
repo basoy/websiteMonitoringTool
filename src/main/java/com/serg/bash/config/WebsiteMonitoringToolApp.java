@@ -13,12 +13,9 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableMongoAuditing
 @ComponentScan(basePackages = "com.serg.bash.*")
 @EnableReactiveMongoRepositories(basePackages = "com.serg.bash.*")
-@EnableAsync
 public class WebsiteMonitoringToolApp {
 
     public static void main(String[] args) {
         SpringApplication.run(WebsiteMonitoringToolApp.class);
     }
 }
-
-

@@ -1,14 +1,12 @@
-package com.serg.bash.service;
+package com.serg.bash.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 @Service
 public class GetWebsiteService {
@@ -16,11 +14,10 @@ public class GetWebsiteService {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Async
-    public CompletableFuture<Object> getWebsite(String url) throws InterruptedException {
+    public Future getWebsiteStatus(String url) throws InterruptedException {
         HttpStatus statusCode = null;
         try {
-            ResponseEntity<Object> result = restTemplate.getForEntity(url, null);
+            ResponseEntity result = restTemplate.getForEntity(url, null);
             statusCode = result.getStatusCode();
         } catch (Exception e) {
             System.out.println(e);

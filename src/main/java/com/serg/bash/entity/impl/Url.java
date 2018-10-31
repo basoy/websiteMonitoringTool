@@ -1,14 +1,17 @@
-package com.serg.bash.entity;
+package com.serg.bash.entity.impl;
 
+import com.serg.bash.entity.BaseEntity;
 import com.serg.bash.monitor.Status;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.stereotype.Component;
 
 @Document(collection = "url")
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Url extends BaseEntity{
+@Component
+public class Url extends BaseEntity {
 
     private String url;
 
@@ -37,5 +40,4 @@ public class Url extends BaseEntity{
 //
 //* Опционально - подстрока, которая должна содержаться в респонсе.
 //    Если подстроки нету, статус URL-а должен быть CRITICAL.
-
 }
