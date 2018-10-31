@@ -1,8 +1,8 @@
-package com.serg.bash.service.impl;
+package com.serg.bash.monitor.service.impl;
 
-import com.serg.bash.entity.impl.Url;
-import com.serg.bash.repository.UrlRepository;
-import com.serg.bash.service.UrlService;
+import com.serg.bash.monitor.entity.impl.Url;
+import com.serg.bash.monitor.repository.UrlRepository;
+import com.serg.bash.monitor.service.UrlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;

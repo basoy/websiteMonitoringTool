@@ -1,6 +1,6 @@
-package com.serg.bash.service;
+package com.serg.bash.monitor.service;
 
-import com.serg.bash.entity.impl.Url;
+import com.serg.bash.monitor.entity.impl.Url;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

@@ -1,4 +1,4 @@
-package com.serg.bash.service.impl;
+package com.serg.bash.monitor.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

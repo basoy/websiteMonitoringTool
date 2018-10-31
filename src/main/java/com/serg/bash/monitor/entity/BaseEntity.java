@@ -1,4 +1,4 @@
-package com.serg.bash.entity;
+package com.serg.bash.monitor.entity;
 
 import lombok.Data;
 import org.springframework.data.annotation.*;

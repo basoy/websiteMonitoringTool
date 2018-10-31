@@ -1,6 +1,6 @@
 package com.serg.bash.util;
 
-import com.serg.bash.entity.impl.Url;
+import com.serg.bash.monitor.entity.impl.Url;
 import com.serg.bash.task.GetWebsiteTask;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Component;

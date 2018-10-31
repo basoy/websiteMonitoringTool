@@ -1,6 +1,6 @@
-package com.serg.bash.entity.impl;
+package com.serg.bash.monitor.entity.impl;
 
-import com.serg.bash.entity.BaseEntity;
+import com.serg.bash.monitor.entity.BaseEntity;
 import com.serg.bash.monitor.Status;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

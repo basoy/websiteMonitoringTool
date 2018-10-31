@@ -1,7 +1,7 @@
 package com.serg.bash.task;
 
-import com.serg.bash.entity.impl.Url;
-import com.serg.bash.service.impl.GetWebsiteService;
+import com.serg.bash.monitor.entity.impl.Url;
+import com.serg.bash.monitor.service.impl.GetWebsiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;

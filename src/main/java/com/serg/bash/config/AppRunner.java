@@ -1,7 +1,7 @@
 package com.serg.bash.config;
 
-import com.serg.bash.service.UrlService;
-import com.serg.bash.service.impl.GetWebsiteService;
+import com.serg.bash.monitor.service.UrlService;
+import com.serg.bash.monitor.service.impl.GetWebsiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

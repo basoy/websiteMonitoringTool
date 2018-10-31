@@ -1,7 +1,7 @@
-package com.serg.bash.controller;
+package com.serg.bash.monitor.controller;
 
-import com.serg.bash.entity.impl.Url;
-import com.serg.bash.service.UrlService;
+import com.serg.bash.monitor.entity.impl.Url;
+import com.serg.bash.monitor.service.UrlService;
 import com.serg.bash.util.MonitoringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
