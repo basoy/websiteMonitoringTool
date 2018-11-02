@@ -2,6 +2,7 @@ package com.serg.bash.task;
 
 import com.serg.bash.monitor.Status;
 import com.serg.bash.monitor.dto.Url;
+import com.serg.bash.monitor.dto.UrlResponse;
 import com.serg.bash.monitor.service.UrlService;
 import com.serg.bash.monitor.service.impl.GetWebsiteService;
 import com.serg.bash.util.MonitoringUtils;
@@ -43,10 +44,12 @@ public class GetWebsiteTask implements Runnable {
             while(!currentThread.isInterrupted()){
                 String urlFull = url.getUrl() + url.getSubQuery();
                 website = getWebsiteService.getWebsiteStatus(urlFull);
-                HttpStatus httpStatus = (HttpStatus)website.get();
-                validateHttpStatus(httpStatus);
+                UrlResponse url = (UrlResponse) website.get();
+                int responseCode = url.getResponseCode();
+                validateResponseCode(responseCode);
                 validateSubQuery();
-                System.out.println(new Date() + "[" + currentThread.getName() + "]" + ":" + httpStatus + ":" + urlFull);
+                validateSizeContent(url.getResponseSize());
+                System.out.println(new Date() + "[" + currentThread.getName() + "]" + ":" + responseCode + ":" + urlFull);
             }
             website.cancel(true);
         } catch (Exception e) {
@@ -54,8 +57,8 @@ public class GetWebsiteTask implements Runnable {
         }
     }
 
-    private void validateHttpStatus(HttpStatus httpStatus) {
-        if(httpStatus != HttpStatus.OK){
+    private void validateResponseCode(int responseCode) {
+        if(responseCode != HttpStatus.OK.value()){
             Url urlSaved = service.findByName(url.getName()).block();
             urlSaved.setStatus(Status.CRITICAL);
             service.updateUrl(urlSaved);
@@ -72,8 +75,8 @@ public class GetWebsiteTask implements Runnable {
         }
     }
 
-    private void validateSizeContent(){
-        if(url.getSubQuery() == null){
+    private void validateSizeContent(long responseSize){
+        if(responseSize > url.getMaxResponseSize() || responseSize < url.getMinResponseSize()){
             Url urlSaved = service.findByName(url.getName()).block();
             urlSaved.setStatus(Status.CRITICAL);
             service.updateUrl(urlSaved);

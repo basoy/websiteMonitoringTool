@@ -21,9 +21,9 @@ public class UrlEntity extends BaseEntity {
 
     private String subQuery;
 
-    private int minResponseSize;
+    private long minResponseSize;
 
-    private int maxResponseSize;
+    private long maxResponseSize;
 
 //    sites.period.monitoring=600
 //    sites.response.time=15

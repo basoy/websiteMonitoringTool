@@ -1,5 +1,7 @@
 package com.serg.bash.monitor.service.impl;
 
+import com.serg.bash.monitor.dto.Url;
+import com.serg.bash.monitor.dto.UrlResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,15 +18,15 @@ public class GetWebsiteService {
     private RestTemplate restTemplate;
 
     public Future getWebsiteStatus(String url) throws InterruptedException {
-        HttpStatus statusCode = null;
+        UrlResponse urlResponse = new UrlResponse();
         try {
             ResponseEntity <Object>result = restTemplate.getForEntity(url, null);
-            System.out.println(result.getHeaders().getContentLength());
-            statusCode = result.getStatusCode();
+            urlResponse.setResponseCode(result.getStatusCode().value());
+            urlResponse.setResponseSize(result.getHeaders().getContentLength());
         } catch (Exception e) {
             System.out.println(e);
         }
 
-        return CompletableFuture.completedFuture(statusCode);
+        return CompletableFuture.completedFuture(urlResponse);
     }
 }

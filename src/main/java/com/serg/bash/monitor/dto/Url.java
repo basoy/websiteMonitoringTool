@@ -35,7 +35,7 @@ public class Url {
 
     private Long version;
 
-    private int minResponseSize;
+    private long minResponseSize;
 
-    private int maxResponseSize;
+    private long maxResponseSize;
 }
