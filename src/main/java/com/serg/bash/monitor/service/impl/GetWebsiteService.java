@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
@@ -17,7 +18,8 @@ public class GetWebsiteService {
     public Future getWebsiteStatus(String url) throws InterruptedException {
         HttpStatus statusCode = null;
         try {
-            ResponseEntity result = restTemplate.getForEntity(url, null);
+            ResponseEntity <Object>result = restTemplate.getForEntity(url, null);
+            System.out.println(result.getHeaders().getContentLength());
             statusCode = result.getStatusCode();
         } catch (Exception e) {
             System.out.println(e);

@@ -1,5 +1,6 @@
 package com.serg.bash.config;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -52,5 +53,10 @@ public class AppConfiguration {
     @Bean
     public Executor executor() {
         return Executors.newCachedThreadPool();
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 }

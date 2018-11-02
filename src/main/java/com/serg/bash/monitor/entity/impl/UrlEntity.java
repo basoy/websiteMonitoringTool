@@ -1,17 +1,13 @@
 package com.serg.bash.monitor.entity.impl;
 
-import com.serg.bash.monitor.entity.BaseEntity;
 import com.serg.bash.monitor.Status;
+import com.serg.bash.monitor.entity.BaseEntity;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.stereotype.Component;
 
-@Document(collection = "url")
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Component
-public class Url extends BaseEntity {
+@Document(collection = "url")
+public class UrlEntity extends BaseEntity {
 
     private String url;
 
@@ -24,6 +20,10 @@ public class Url extends BaseEntity {
     private Status status;
 
     private String subQuery;
+
+    private int minResponseSize;
+
+    private int maxResponseSize;
 
 //    sites.period.monitoring=600
 //    sites.response.time=15
