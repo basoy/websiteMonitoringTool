@@ -49,6 +49,7 @@ public class GetWebsiteTask implements Runnable {
                 validateResponseCode(responseCode);
                 validateSubQuery();
                 validateSizeContent(url.getResponseSize());
+                validateResponseTime(url.getResponseTime());
                 System.out.println(new Date() + "[" + currentThread.getName() + "]" + ":" + responseCode + ":" + urlFull);
             }
             website.cancel(true);
@@ -81,6 +82,21 @@ public class GetWebsiteTask implements Runnable {
             urlSaved.setStatus(Status.CRITICAL);
             service.updateUrl(urlSaved);
             // Thread.currentThread().interrupt();
+        }
+    }
+
+    private void validateResponseTime(long responseTime) {
+        if(responseTime > 300){
+            Url urlSaved = service.findByName(url.getName()).block();
+            urlSaved.setStatus(Status.WARNING);
+            service.updateUrl(urlSaved);
+            Thread.currentThread().interrupt();
+        }
+        if(responseTime > 500){
+            Url urlSaved = service.findByName(url.getName()).block();
+            urlSaved.setStatus(Status.CRITICAL);
+            service.updateUrl(urlSaved);
+            Thread.currentThread().interrupt();
         }
     }
 

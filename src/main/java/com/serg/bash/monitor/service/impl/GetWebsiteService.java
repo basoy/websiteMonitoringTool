@@ -20,9 +20,11 @@ public class GetWebsiteService {
     public Future getWebsiteStatus(String url) throws InterruptedException {
         UrlResponse urlResponse = new UrlResponse();
         try {
+            long startRequestTime = System.currentTimeMillis();
             ResponseEntity <Object>result = restTemplate.getForEntity(url, null);
             urlResponse.setResponseCode(result.getStatusCode().value());
             urlResponse.setResponseSize(result.getHeaders().getContentLength());
+            urlResponse.setResponseTime(System.currentTimeMillis() - startRequestTime);
         } catch (Exception e) {
             System.out.println(e);
         }

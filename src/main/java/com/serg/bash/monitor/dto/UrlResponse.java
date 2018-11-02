@@ -10,4 +10,6 @@ public class UrlResponse {
     private int responseCode;
 
     private long responseSize;
+
+    private long responseTime;
 }
