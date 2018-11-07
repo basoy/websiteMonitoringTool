@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -48,6 +49,7 @@ public class GetWebsiteTask implements Runnable {
                 String urlFull = url.getUrl() + url.getSubQuery();
                 website = getWebsiteService.getWebsiteStatus(urlFull);
                 UrlResponse urlResponse = (UrlResponse) website.get();
+                TimeUnit.MILLISECONDS.sleep(url.getPeriodMonitoring());
                 validator.initialValidation(urlResponse);
                 System.out.println(new Date() + "[" + currentThread.getName() + "]" + ":" +
                         urlResponse.getResponseCode() + ":" + urlFull);
