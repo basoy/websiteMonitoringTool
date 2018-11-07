@@ -15,7 +15,7 @@ public class Url {
 
     private int periodMonitoring;
 
-    private int responseTime;
+    private long responseTime;
 
     private int responseCode;
 

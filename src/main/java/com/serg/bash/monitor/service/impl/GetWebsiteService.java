@@ -18,15 +18,15 @@ public class GetWebsiteService {
 
     public Future getWebsiteStatus(String url) throws InterruptedException {
         UrlResponse urlResponse = new UrlResponse();
+        long startRequestTime = System.currentTimeMillis();
         try {
-            long startRequestTime = System.currentTimeMillis();
             String result = restTemplate.getForObject(url, String.class);
             urlResponse.setResponseCode(HttpStatus.OK.value());
             urlResponse.setResponseSize(result.length());
-            urlResponse.setResponseTime(System.currentTimeMillis() - startRequestTime);
         } catch (HttpServerErrorException e) {
             urlResponse.setResponseCode(e.getRawStatusCode());
         }
+        urlResponse.setResponseTime(System.currentTimeMillis() - startRequestTime);
 
         return CompletableFuture.completedFuture(urlResponse);
     }

@@ -1,15 +1,14 @@
 package com.serg.bash.task;
 
-import com.serg.bash.monitor.Status;
 import com.serg.bash.monitor.dto.Url;
 import com.serg.bash.monitor.dto.UrlResponse;
 import com.serg.bash.monitor.service.UrlService;
 import com.serg.bash.monitor.service.impl.GetWebsiteService;
 import com.serg.bash.util.MonitoringUtils;
+import com.serg.bash.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -29,6 +28,9 @@ public class GetWebsiteTask implements Runnable {
     @Autowired
     private MonitoringUtils utils;
 
+    //TODO: @Inject "this.url = url", i.e. dynamic injecting Url
+    private Validator validator;
+
     @Autowired
     private Url url;
 
@@ -39,58 +41,21 @@ public class GetWebsiteTask implements Runnable {
     @Override
     public void run() {
         try {
+            validator = new Validator(service, url);//TODO: dynamic injecting Url
             Future website = new CompletableFuture();
             Thread currentThread = Thread.currentThread();
-            while(!currentThread.isInterrupted()){
+            while (!currentThread.isInterrupted()) {
                 String urlFull = url.getUrl() + url.getSubQuery();
                 website = getWebsiteService.getWebsiteStatus(urlFull);
-                UrlResponse url = (UrlResponse) website.get();
-                int responseCode = url.getResponseCode();
-                validateResponseCode(responseCode);
-                validateSubQuery();
-                validateSizeContent(url.getResponseSize());
-                validateResponseTime(url.getResponseTime());
-                System.out.println(new Date() + "[" + currentThread.getName() + "]" + ":" + responseCode + ":" + urlFull);
+                UrlResponse urlResponse = (UrlResponse) website.get();
+                validator.initialValidation(urlResponse);
+                System.out.println(new Date() + "[" + currentThread.getName() + "]" + ":" +
+                        urlResponse.getResponseCode() + ":" + urlFull);
             }
             website.cancel(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void validateResponseCode(int responseCode) {
-        if(responseCode != HttpStatus.OK.value()){
-            Url urlSaved = service.findByName(url.getName()).block();
-            urlSaved.setStatus(Status.CRITICAL);
-            service.updateUrl(urlSaved);
-        }
-    }
-
-    private void validateSubQuery(){
-        if(url.getSubQuery() == null){
-            Url urlSaved = service.findByName(url.getName()).block();
-            urlSaved.setStatus(Status.CRITICAL);
-            service.updateUrl(urlSaved);
-        }
-    }
-
-    private void validateSizeContent(long responseSize){
-        if(responseSize > url.getMaxResponseSize() || responseSize < url.getMinResponseSize()){
-            Url urlSaved = service.findByName(url.getName()).block();
-            urlSaved.setStatus(Status.CRITICAL);
-            service.updateUrl(urlSaved);
-        }
-    }
-
-    private void validateResponseTime(long responseTime) {
-        Url urlSaved = service.findByName(url.getName()).block();
-        if(responseTime > 300){
-            urlSaved.setStatus(Status.WARNING);
-        }
-        if(responseTime > 500){
-            urlSaved.setStatus(Status.CRITICAL);
-        }
-        service.updateUrl(urlSaved);
     }
 
     public void setUrl(Url url) {
