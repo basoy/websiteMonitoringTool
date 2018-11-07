@@ -14,7 +14,7 @@ public abstract class BaseEntity implements Serializable {
     @Id
     private String id;
 
-    @Indexed
+    @Indexed(unique = true)
     @TextIndexed
     private String name;
 

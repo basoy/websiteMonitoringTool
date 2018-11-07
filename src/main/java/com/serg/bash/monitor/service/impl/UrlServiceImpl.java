@@ -31,7 +31,8 @@ public class UrlServiceImpl implements UrlService {
         for (UrlEntity urlEntity : block) {
             urls.add(utils.fromUrlEntityToUrl(urlEntity));
         }
-        return Flux.fromIterable(urls);
+        return Flux.fromIterable(urls).switchIfEmpty(Mono.
+                error(new Exception("No Urls found!")));
     }
 
     @Override
@@ -43,19 +44,24 @@ public class UrlServiceImpl implements UrlService {
 
     @Override
     public Mono<Void> delete(String id) {
-        return repository.deleteById(id);
+
+        return repository.deleteById(id).doOnError(Throwable::getMessage);
     }
 
     @Override
     public Mono<Url> findOne(String id) {
-        UrlEntity urlEntity = repository.findById(id).block();
+        UrlEntity urlEntity = repository.findById(id).switchIfEmpty(Mono.
+                error(new Exception("No Url found with Id: " + id))).block();
         Url url = utils.fromUrlEntityToUrl(urlEntity);
-        return Mono.just(url).switchIfEmpty(Mono.error(new Exception("No Url found with Id: " + id)));
+
+        return Mono.just(url);
     }
 
     @Override
     public Mono<Url> updateUrl(Url url) {
-        UrlEntity destinationEntity = repository.findById(url.getId()).block();
+        String id = url.getId();
+        UrlEntity destinationEntity = repository.findById(id).switchIfEmpty(Mono.
+                error(new Exception("No Url found with Id: " + id))).block();
         UrlEntity sourceEntity = utils.fromUrlToUrlEntity(url);
         utils.updateEntity(sourceEntity, destinationEntity);
 
@@ -64,8 +70,10 @@ public class UrlServiceImpl implements UrlService {
 
     @Override
     public Mono<Url> findByName(String name) {
-        UrlEntity urlEntity = repository.findByName(name).blockFirst();
+        UrlEntity urlEntity = repository.findByName(name).switchIfEmpty(Mono.
+                error(new Exception("No Url found with name: " + name))).blockFirst();
         Url url = utils.fromUrlEntityToUrl(urlEntity);
-        return Mono.just(url).switchIfEmpty(Mono.error(new Exception("No Url found with name: " + name)));
+
+        return Mono.just(url);
     }
 }

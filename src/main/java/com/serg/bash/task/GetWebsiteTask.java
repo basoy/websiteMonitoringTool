@@ -63,7 +63,6 @@ public class GetWebsiteTask implements Runnable {
             Url urlSaved = service.findByName(url.getName()).block();
             urlSaved.setStatus(Status.CRITICAL);
             service.updateUrl(urlSaved);
-            Thread.currentThread().interrupt();
         }
     }
 
@@ -72,7 +71,6 @@ public class GetWebsiteTask implements Runnable {
             Url urlSaved = service.findByName(url.getName()).block();
             urlSaved.setStatus(Status.CRITICAL);
             service.updateUrl(urlSaved);
-            // Thread.currentThread().interrupt();
         }
     }
 
@@ -81,23 +79,18 @@ public class GetWebsiteTask implements Runnable {
             Url urlSaved = service.findByName(url.getName()).block();
             urlSaved.setStatus(Status.CRITICAL);
             service.updateUrl(urlSaved);
-            // Thread.currentThread().interrupt();
         }
     }
 
     private void validateResponseTime(long responseTime) {
+        Url urlSaved = service.findByName(url.getName()).block();
         if(responseTime > 300){
-            Url urlSaved = service.findByName(url.getName()).block();
             urlSaved.setStatus(Status.WARNING);
-            service.updateUrl(urlSaved);
-            Thread.currentThread().interrupt();
         }
         if(responseTime > 500){
-            Url urlSaved = service.findByName(url.getName()).block();
             urlSaved.setStatus(Status.CRITICAL);
-            service.updateUrl(urlSaved);
-            Thread.currentThread().interrupt();
         }
+        service.updateUrl(urlSaved);
     }
 
     public void setUrl(Url url) {
