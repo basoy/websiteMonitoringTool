@@ -76,4 +76,9 @@ public class UrlServiceImpl implements UrlService {
 
         return Mono.just(url);
     }
+
+    @Override
+    public Mono<Void> deleteAll(){
+        return repository.deleteAll();
+    }
 }

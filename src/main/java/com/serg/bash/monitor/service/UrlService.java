@@ -17,4 +17,6 @@ public interface UrlService {
     Mono<Url> updateUrl(Url url);
 
     Mono<Url> findByName(String name);
+
+    Mono<Void> deleteAll();
 }

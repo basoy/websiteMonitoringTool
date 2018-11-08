@@ -36,4 +36,9 @@ public class MonitoringController {
         utils.deleteWebsiteFromMonitoring(urlService.findOne(id).block().getName());
         return urlService.delete(id);
     }
+
+    @DeleteMapping("/delete/all")
+    public Mono<Void> All() {
+        return urlService.deleteAll();
+    }
 }

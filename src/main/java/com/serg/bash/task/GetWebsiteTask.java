@@ -51,8 +51,6 @@ public class GetWebsiteTask implements Runnable {
                 UrlResponse urlResponse = (UrlResponse) website.get();
                 TimeUnit.MILLISECONDS.sleep(url.getPeriodMonitoring());
                 validator.initialValidation(urlResponse);
-                System.out.println(new Date() + "[" + currentThread.getName() + "]" + ":" +
-                        urlResponse.getResponseCode() + ":" + urlFull);
             }
             website.cancel(true);
         } catch (Exception e) {
