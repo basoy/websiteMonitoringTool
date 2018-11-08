@@ -28,26 +28,8 @@ public class AppConfiguration {
     @Bean
     public RestTemplate restTemplate() {
         RestTemplate restTemplate = new RestTemplate();
-        List converters = new ArrayList<>();
-        converters.add(httpMessageConverter());
-        restTemplate.setMessageConverters(converters);
         proxyCustomizer.customize(restTemplate);
         return restTemplate;
-    }
-
-    @Bean
-    public RestTemplateBuilder restTemplateBuilder() {
-        return new RestTemplateBuilder();
-    }
-
-    @Bean
-    public HttpMessageConverter httpMessageConverter() {
-        List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setSupportedMediaTypes(Arrays.asList(MediaType.ALL));
-        messageConverters.add(converter);
-
-        return converter;
     }
 
     @Bean
