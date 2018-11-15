@@ -2,15 +2,14 @@ package com.bash.serg.dto;
 
 import com.bash.serg.Status;
 import lombok.Data;
-import lombok.Value;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.Date;
 
 
 @Data
-@Value
-public class Url implements Serializable{
+@NoArgsConstructor
+public class Url{
 
     private String id;
 
