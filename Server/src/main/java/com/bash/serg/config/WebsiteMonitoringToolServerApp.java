@@ -6,12 +6,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @EnableAutoConfiguration
 @Configuration
 @EnableMongoAuditing
 @ComponentScan(basePackages = "com.bash.serg")
 @EnableReactiveMongoRepositories(basePackages = "com.bash.serg")
+@EnableAsync
 public class WebsiteMonitoringToolServerApp {
 
     public static void main(String[] args) {
