@@ -22,7 +22,6 @@ public class MonitoringController {
     private MonitoringUtils utils;
 
     @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    @Async("executor")
     public Flux<Url> findAll() {
         return urlService.findAll();
     }
