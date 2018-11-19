@@ -1,8 +1,8 @@
 package com.bash.serg.util;
 
 import com.bash.serg.monitor.Status;
-import com.bash.serg.monitor.dto.Url;
 import com.bash.serg.monitor.dto.UrlResponse;
+import com.bash.serg.monitor.entity.impl.Url;
 import com.bash.serg.monitor.service.UrlService;
 import org.springframework.http.HttpStatus;
 
@@ -19,39 +19,39 @@ public class Validator {
     }
 
     private void validateResponseCode(int responseCode) {
-        Url urlSaved = service.findByName(url.getName()).block();
+        Url urlSaved = service.findByName(url.getName()).blockFirst();
         if (responseCode != HttpStatus.OK.value()) {
             urlSaved.setStatus(Status.CRITICAL);
         }
         urlSaved.setResponseCode(responseCode);
-        service.updateUrl(urlSaved);
+        service.updateUrl(urlSaved).block();//if we return without block() -we get not last information
     }
 
     private void validateSubQuery() {
         if (url.getSubQuery() == null) {
-            Url urlSaved = service.findByName(url.getName()).block();
+            Url urlSaved = service.findByName(url.getName()).blockFirst();
             urlSaved.setStatus(Status.CRITICAL);
-            service.updateUrl(urlSaved);
+            service.updateUrl(urlSaved).block();
         }
     }
 
     private void validateSizeContent(long responseSize) {
         if (responseSize > url.getMaxResponseSize() || responseSize < url.getMinResponseSize()) {
-            Url urlSaved = service.findByName(url.getName()).block();
+            Url urlSaved = service.findByName(url.getName()).blockFirst();
             urlSaved.setStatus(Status.CRITICAL);
-            service.updateUrl(urlSaved);
+            service.updateUrl(urlSaved).block();
         }
     }
 
     private void validateResponseTime(long responseTime) {
-        Url urlSaved = service.findByName(url.getName()).block();
+        Url urlSaved = service.findByName(url.getName()).blockFirst();
         if (responseTime > 1 && responseTime <= 5) {
             urlSaved.setStatus(Status.WARNING);
         } else if (responseTime > 5) {
             urlSaved.setStatus(Status.CRITICAL);
         }
-        urlSaved.setResponseTime(responseTime);
-        service.updateUrl(urlSaved);
+        urlSaved.setResponseTime((int)responseTime);
+        service.updateUrl(urlSaved).block();
     }
 
     public void initialValidation(UrlResponse url){

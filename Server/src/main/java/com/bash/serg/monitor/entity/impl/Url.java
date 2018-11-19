@@ -5,11 +5,13 @@ import com.bash.serg.monitor.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.stereotype.Component;
 
 @Data
 @Document(collection = "url")
 @EqualsAndHashCode(callSuper = false)
-public class UrlEntity extends BaseEntity {
+@Component
+public class Url extends BaseEntity {
 
     private String url;
 

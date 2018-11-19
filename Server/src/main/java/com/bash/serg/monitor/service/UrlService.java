@@ -1,6 +1,6 @@
 package com.bash.serg.monitor.service;
 
-import com.bash.serg.monitor.dto.Url;
+import com.bash.serg.monitor.entity.impl.Url;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -16,7 +16,7 @@ public interface UrlService {
 
     Mono<Url> updateUrl(Url url);
 
-    Mono<Url> findByName(String name);
+    Flux<Url> findByName(String name);
 
     Mono<Void> deleteAll();
 }

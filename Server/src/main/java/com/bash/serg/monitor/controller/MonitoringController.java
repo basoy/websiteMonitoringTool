@@ -1,12 +1,11 @@
 package com.bash.serg.monitor.controller;
 
-import com.bash.serg.monitor.dto.Url;
+import com.bash.serg.monitor.entity.impl.Url;
 import com.bash.serg.monitor.service.UrlService;
 import com.bash.serg.util.MonitoringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -42,5 +41,11 @@ public class MonitoringController {
     @DeleteMapping("/delete/all")
     public Mono<Void> All() {
         return urlService.deleteAll();
+    }
+
+    @PostMapping("/update")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<Url> updateUrl(@RequestBody Url url) {
+        return urlService.updateUrl(url);
     }
 }

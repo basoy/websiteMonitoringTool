@@ -1,10 +1,9 @@
 package com.bash.serg.task;
 
-import com.bash.serg.monitor.dto.Url;
 import com.bash.serg.monitor.dto.UrlResponse;
+import com.bash.serg.monitor.entity.impl.Url;
 import com.bash.serg.monitor.service.UrlService;
 import com.bash.serg.monitor.service.impl.GetWebsiteService;
-import com.bash.serg.util.MonitoringUtils;
 import com.bash.serg.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -26,12 +25,6 @@ public class GetWebsiteTask implements Runnable {
     private UrlService service;
 
     @Autowired
-    private MonitoringUtils utils;
-
-    //TODO: @Inject "this.url = url", i.e. dynamic injecting Url
-    private Validator validator;
-
-    @Autowired
     private Url url;
 
     public GetWebsiteTask(Url url) {
@@ -41,7 +34,7 @@ public class GetWebsiteTask implements Runnable {
     @Override
     public void run() {
         try {
-            validator = new Validator(service, url);//TODO: dynamic injecting Url
+            Validator validator = new Validator(service, url);
             Future website = new CompletableFuture();
             Thread currentThread = Thread.currentThread();
             while (!currentThread.isInterrupted()) {
