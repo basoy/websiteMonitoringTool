@@ -1,4 +1,4 @@
-# websiteMonitoringTool.
+# Website Monitoring Tool.
 Technologies:
 1. Spring Boot 5(react, webflux)
 2. Thymeleaf.
