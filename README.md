@@ -6,3 +6,4 @@ Technologies:
 4. Ractive mongoDb.
 5. Lombok.
 6. Swagger2.
+7. Proxy.
