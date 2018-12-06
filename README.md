@@ -7,3 +7,4 @@ Technologies:
 5. Lombok.
 6. Swagger2.
 7. Proxy.
+8. Multi-thread.
