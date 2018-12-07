@@ -2,6 +2,8 @@ package com.bash.serg.util;
 
 import com.bash.serg.monitor.entity.impl.Url;
 import com.bash.serg.task.GetWebsiteTask;
+import com.bash.serg.task.TaskManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +13,13 @@ import java.util.Set;
 public class MonitoringUtils {
 
     private GetWebsiteTask getWebsiteTask;
+
+    private TaskManager taskManager;
+
+    @Autowired
+    public void setTaskManager(TaskManager taskManager) {
+        this.taskManager = taskManager;
+    }
 
     @Lookup
     public GetWebsiteTask getGetWebsiteTask(){
@@ -40,6 +49,7 @@ public class MonitoringUtils {
     public void addWebsiteToMonitoring(Url url) {
         getWebsiteTask = getGetWebsiteTask();
         getWebsiteTask.setUrl(url);
-        new Thread(getWebsiteTask, "websiteMonitoringTool-" + url.getId()).start();
+        taskManager.setTask(getWebsiteTask);
+        taskManager.startNewTask();
     }
 }
