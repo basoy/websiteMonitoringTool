@@ -22,7 +22,7 @@ public class MonitoringController {
     private MonitoringUtils utils;
 
     @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    @CrossOrigin(origins = "http://localhost:8082")//for testing server and client from one place
+    @CrossOrigin(origins = "http://localhost:8084")//for testing server and client from one place
     public Mono<List<Url>> findAll() {
         return urlService.findAll().collectList();
     }

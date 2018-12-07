@@ -2,17 +2,10 @@ package com.bash.serg.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -25,31 +18,8 @@ public class AppConfiguration {
     @Bean
     public RestTemplate restTemplate() {
         RestTemplate restTemplate = new RestTemplate();
-        List converters = new ArrayList<>();
-        converters.add(httpMessageConverter());
-        converters.add(new StringHttpMessageConverter());
-        restTemplate.setMessageConverters(converters);
         proxyCustomizer.customize(restTemplate);
-
         return restTemplate;
-    }
-
-    @Bean
-    public RestTemplateBuilder restTemplateBuilder() {
-        return new RestTemplateBuilder();
-    }
-
-    @Bean
-    public HttpMessageConverter httpMessageConverter() {
-        List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        List listTypes = new ArrayList();
-        listTypes.add(MediaType.TEXT_EVENT_STREAM);
-        listTypes.add(MediaType.ALL);
-        converter.setSupportedMediaTypes(listTypes);
-        messageConverters.add(converter);
-
-        return converter;
     }
 
     @Bean

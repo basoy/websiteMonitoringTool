@@ -5,6 +5,5 @@ Technologies:
 3. Multi-module project.
 4. Ractive mongoDb.
 5. Lombok.
-6. Swagger2.
-7. Proxy.
-8. Multi-thread.
+6. Proxy.
+7. Multi-thread.
