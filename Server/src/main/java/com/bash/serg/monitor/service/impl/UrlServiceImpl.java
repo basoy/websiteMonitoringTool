@@ -27,10 +27,18 @@ public class UrlServiceImpl implements UrlService {
     }
 
     @Override
-    public Mono<Url> createUrl(Url url) { return repository.insert(url); }
+    public Mono<Url> createUrl(Url url) {
+        utils.addWebsiteToMonitoring(url);
+
+        return repository.insert(url);
+    }
 
     @Override
-    public Mono<Void> delete(String id) { return repository.deleteById(id).doOnError(Throwable::getMessage); }
+    public Mono<Void> delete(String id) {
+        utils.deleteWebsiteFromMonitoring(id);
+
+        return repository.deleteById(id).doOnError(Throwable::getMessage);
+    }
 
     @Override
     public Mono<Url> findOne(String id) {
@@ -51,5 +59,9 @@ public class UrlServiceImpl implements UrlService {
     }
 
     @Override
-    public Mono<Void> deleteAll(){ return repository.deleteAll(); }
+    public Mono<Void> deleteAll(){
+        utils.deleteAllWebsitesFromMonitoring();
+
+        return repository.deleteAll();
+    }
 }

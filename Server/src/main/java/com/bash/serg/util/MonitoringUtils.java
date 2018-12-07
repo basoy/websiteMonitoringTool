@@ -21,7 +21,17 @@ public class MonitoringUtils {
         Set<Thread> threads = Thread.getAllStackTraces().keySet();
 
         for(Thread thread : threads){
-            if(thread.getName().equals(threadName)){
+            if(thread.getName().equals("websiteMonitoringTool-" + threadName)){
+                thread.interrupt();
+            }
+        }
+    }
+
+    public void deleteAllWebsitesFromMonitoring(){
+        Set<Thread> threads = Thread.getAllStackTraces().keySet();
+
+        for(Thread thread : threads){
+            if(thread.getName().contains("websiteMonitoringTool-")){
                 thread.interrupt();
             }
         }
@@ -30,6 +40,6 @@ public class MonitoringUtils {
     public void addWebsiteToMonitoring(Url url) {
         getWebsiteTask = getGetWebsiteTask();
         getWebsiteTask.setUrl(url);
-        new Thread(getWebsiteTask, "websiteMonitoringTool-" + url.getName()).start();
+        new Thread(getWebsiteTask, "websiteMonitoringTool-" + url.getId()).start();
     }
 }

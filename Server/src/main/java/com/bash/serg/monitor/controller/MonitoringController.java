@@ -18,9 +18,6 @@ public class MonitoringController {
     @Autowired
     private UrlService urlService;
 
-    @Autowired
-    private MonitoringUtils utils;
-
     @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @CrossOrigin(origins = "http://localhost:8084")//for testing server and client from one place
     public Mono<List<Url>> findAll() {
@@ -30,13 +27,11 @@ public class MonitoringController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Url> createUrl(@RequestBody Url url) {
-        utils.addWebsiteToMonitoring(url);
         return urlService.createUrl(url);
     }
 
     @DeleteMapping("/delete/{id}")
     public Mono<Void> delete(@PathVariable String id) {
-        utils.deleteWebsiteFromMonitoring(urlService.findOne(id).block().getName());
         return urlService.delete(id);
     }
 

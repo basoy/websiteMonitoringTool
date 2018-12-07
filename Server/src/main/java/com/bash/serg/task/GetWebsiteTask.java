@@ -41,6 +41,7 @@ public class GetWebsiteTask implements Runnable {
                 String urlFull = url.getUrl() + url.getSubQuery();
                 website = getWebsiteService.getWebsiteStatus(urlFull);
                 UrlResponse urlResponse = (UrlResponse) website.get();
+                currentThread.interrupt();
                 TimeUnit.MILLISECONDS.sleep(url.getPeriodMonitoring());
                 validator.initialValidation(urlResponse);
             }

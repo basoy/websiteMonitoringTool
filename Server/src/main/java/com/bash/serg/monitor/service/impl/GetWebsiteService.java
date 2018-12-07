@@ -20,9 +20,9 @@ public class GetWebsiteService {
         UrlResponse urlResponse = new UrlResponse();
         long startRequestTime = System.currentTimeMillis();
         try {
-            Object result = restTemplate.getForEntity(url, null);
+            String result = restTemplate.getForObject(url, String.class);
             urlResponse.setResponseCode(HttpStatus.OK.value());
-            //urlResponse.setResponseSize(result.length()); FIXme: fix
+            urlResponse.setResponseSize(result.length());
         } catch (HttpServerErrorException e) {
             urlResponse.setResponseCode(e.getRawStatusCode());
         }
