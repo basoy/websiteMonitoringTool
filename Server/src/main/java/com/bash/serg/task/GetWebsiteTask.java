@@ -4,6 +4,7 @@ import com.bash.serg.monitor.dto.UrlResponse;
 import com.bash.serg.monitor.entity.impl.Url;
 import com.bash.serg.monitor.service.UrlService;
 import com.bash.serg.monitor.service.impl.GetWebsiteService;
+import com.bash.serg.util.MonitoringUtils;
 import com.bash.serg.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class GetWebsiteTask implements Runnable {
+public class GetWebsiteTask implements Runnable{
 
     @Autowired
     private GetWebsiteService getWebsiteService;
@@ -27,27 +28,34 @@ public class GetWebsiteTask implements Runnable {
     @Autowired
     private Url url;
 
+    @Autowired
+    MonitoringUtils utils;
+
     public GetWebsiteTask(Url url) {
         this.url = url;
     }
 
     @Override
     public void run() {
-        try {
-            Validator validator = new Validator(service, url);
-            Future website = new CompletableFuture();
-            Thread currentThread = Thread.currentThread();
-            while (!currentThread.isInterrupted()) {
-                String urlFull = url.getUrl() + url.getSubQuery();
-                website = getWebsiteService.getWebsiteStatus(urlFull);
-                UrlResponse urlResponse = (UrlResponse) website.get();
-                TimeUnit.MILLISECONDS.sleep(url.getPeriodMonitoring());
-                validator.initialValidation(urlResponse);
+            try {
+                String url = this.url.getUrl();
+                Future website = new CompletableFuture();
+                if(url != null) {
+                    Validator validator = new Validator(service, this.url);
+                    Thread currentThread = Thread.currentThread();
+                    utils.setThreadName(currentThread, this.url.getId());
+                    while (!currentThread.isInterrupted()) {
+                        String urlFull = url + this.url.getSubQuery();
+                        website = getWebsiteService.getWebsiteStatus(urlFull);
+                        UrlResponse urlResponse = (UrlResponse) website.get();
+                        TimeUnit.MILLISECONDS.sleep(this.url.getPeriodMonitoring());
+                        validator.initialValidation(urlResponse);
+                    }
+                }
+                website.cancel(true);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            website.cancel(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public void setUrl(Url url) {

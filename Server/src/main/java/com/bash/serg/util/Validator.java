@@ -19,7 +19,7 @@ public class Validator {
     }
 
     private void validateResponseCode(int responseCode) {
-        Url urlSaved = service.findByName(url.getName()).blockFirst();
+        Url urlSaved = service.findOne(url.getId()).block();
         if (responseCode != HttpStatus.OK.value()) {
             urlSaved.setStatus(Status.CRITICAL);
         }
@@ -29,7 +29,7 @@ public class Validator {
 
     private void validateSubQuery() {
         if (url.getSubQuery() == null) {
-            Url urlSaved = service.findByName(url.getName()).blockFirst();
+            Url urlSaved = service.findOne(url.getId()).block();
             urlSaved.setStatus(Status.CRITICAL);
             service.updateUrl(urlSaved).block();
         }
@@ -37,14 +37,14 @@ public class Validator {
 
     private void validateSizeContent(long responseSize) {
         if (responseSize > url.getMaxResponseSize() || responseSize < url.getMinResponseSize()) {
-            Url urlSaved = service.findByName(url.getName()).blockFirst();
+            Url urlSaved = service.findOne(url.getId()).block();
             urlSaved.setStatus(Status.CRITICAL);
             service.updateUrl(urlSaved).block();
         }
     }
 
     private void validateResponseTime(long responseTime) {
-        Url urlSaved = service.findByName(url.getName()).blockFirst();
+        Url urlSaved = service.findOne(url.getId()).block();
         if (responseTime > 1 && responseTime <= 5) {
             urlSaved.setStatus(Status.WARNING);
         } else if (responseTime > 5) {
