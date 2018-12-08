@@ -39,7 +39,7 @@ public class MonitoringUtils {
         Set<Thread> threads = Thread.getAllStackTraces().keySet();
 
         for(Thread thread : threads){
-            if(thread.getName().equals(properties.THREAD_NAME() + threadName)){
+            if(thread.getName().equals(getThreadName(threadName))){
                 thread.interrupt();
             }
         }
@@ -49,7 +49,7 @@ public class MonitoringUtils {
         Set<Thread> threads = Thread.getAllStackTraces().keySet();
 
         for(Thread thread : threads){
-            if(thread.getName().contains(properties.THREAD_NAME())){
+            if(thread.getName().contains(getThreadName())){
                 thread.interrupt();
             }
         }
@@ -64,5 +64,13 @@ public class MonitoringUtils {
 
     public void setThreadName(Thread thread, String threadName){
         thread.setName(properties.THREAD_NAME() + threadName);
+    }
+
+    public String getThreadName(String threadName){
+        return getThreadName() + threadName;
+    }
+
+    public String getThreadName(){
+        return properties.THREAD_NAME();
     }
 }

@@ -10,7 +10,7 @@ public interface UrlService {
 
     Mono<Url> createUrl(Url url);
 
-    Mono<Void> delete(String id);
+    Flux<Url> delete(String id);
 
     Mono<Url> findOne(String id);
 

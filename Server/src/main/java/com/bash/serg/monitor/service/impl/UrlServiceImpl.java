@@ -34,10 +34,10 @@ public class UrlServiceImpl implements UrlService {
     }
 
     @Override
-    public Mono<Void> delete(String id) {
-        utils.deleteWebsiteFromMonitoring(id);
+    public Flux<Url> delete(String name) {
+        utils.deleteWebsiteFromMonitoring(name);
 
-        return repository.deleteById(id).doOnError(Throwable::getMessage);
+        return repository.deleteByName(name).doOnError(Throwable::getMessage);
     }
 
     @Override

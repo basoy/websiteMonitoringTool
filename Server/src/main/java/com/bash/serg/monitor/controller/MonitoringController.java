@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class MonitoringController {
     private UrlService urlService;
 
     @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    @CrossOrigin(origins = "http://localhost:8084")//for testing server and client from one place
+    @CrossOrigin(origins = "http://localhost:8084")//for testing server and client from one IP
     public Mono<List<Url>> findAll() {
         return urlService.findAll().collectList();
     }
@@ -29,9 +30,9 @@ public class MonitoringController {
         return urlService.createUrl(url);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public Mono<Void> delete(@PathVariable String id) {
-        return urlService.delete(id);
+    @DeleteMapping("/delete/{name}")
+    public Flux<Url> delete(@PathVariable String name) {
+        return urlService.delete(name);
     }
 
     @DeleteMapping("/delete/all")

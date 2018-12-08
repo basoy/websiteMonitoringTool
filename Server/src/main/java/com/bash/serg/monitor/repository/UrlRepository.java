@@ -9,4 +9,6 @@ import reactor.core.publisher.Flux;
 @Repository
 public interface UrlRepository extends ReactiveMongoRepository <Url,String> {
     Flux<Url> findByName(String name);
+
+    Flux<Url> deleteByName(String name);
 }

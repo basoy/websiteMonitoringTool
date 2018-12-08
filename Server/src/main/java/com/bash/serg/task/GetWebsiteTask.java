@@ -40,10 +40,10 @@ public class GetWebsiteTask implements Runnable{
             try {
                 String url = this.url.getUrl();
                 Future website = new CompletableFuture();
-                if(url != null) {
+                if (url != null) {
                     Validator validator = new Validator(service, this.url);
                     Thread currentThread = Thread.currentThread();
-                    utils.setThreadName(currentThread, this.url.getId());
+                    utils.setThreadName(currentThread, this.url.getName());
                     while (!currentThread.isInterrupted()) {
                         String urlFull = url + this.url.getSubQuery();
                         website = getWebsiteService.getWebsiteStatus(urlFull);
@@ -53,6 +53,8 @@ public class GetWebsiteTask implements Runnable{
                     }
                 }
                 website.cancel(true);
+            } catch (InterruptedException e){
+                Thread.currentThread().interrupt(); // restore interrupted status
             } catch (Exception e) {
                 e.printStackTrace();
             }
