@@ -73,4 +73,8 @@ public class MonitoringUtils {
     public String getThreadName(){
         return properties.THREAD_NAME();
     }
+
+    public ApplicationProperties getProperties() {
+        return properties;
+    }
 }

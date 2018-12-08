@@ -1,5 +1,6 @@
 package com.bash.serg.util;
 
+import com.bash.serg.config.ApplicationProperties;
 import com.bash.serg.monitor.Status;
 import com.bash.serg.monitor.dto.UrlResponse;
 import com.bash.serg.monitor.entity.impl.Url;
@@ -8,6 +9,12 @@ import org.springframework.http.HttpStatus;
 
 //autowired not need :'validator = new Validator()' used
 public class Validator {
+
+    private ApplicationProperties properties;
+
+    public void setProperties(ApplicationProperties properties) {
+        this.properties = properties;
+    }
 
     private UrlService service;
 
@@ -36,7 +43,7 @@ public class Validator {
     }
 
     private void validateSizeContent(long responseSize) {
-        if (responseSize > url.getMaxResponseSize() || responseSize < url.getMinResponseSize()) {
+        if ((byte)responseSize > url.getMaxResponseSize() || (byte)responseSize < url.getMinResponseSize()) {
             Url urlSaved = service.findOne(url.getId()).block();
             urlSaved.setStatus(Status.CRITICAL);
             service.updateUrl(urlSaved).block();
@@ -45,9 +52,9 @@ public class Validator {
 
     private void validateResponseTime(long responseTime) {
         Url urlSaved = service.findOne(url.getId()).block();
-        if (responseTime > 1 && responseTime <= 5) {
+        if (responseTime > 0 && responseTime <= properties.WARNING_STATUS_FROM()) {
             urlSaved.setStatus(Status.WARNING);
-        } else if (responseTime > 5) {
+        } else if (responseTime > properties.CRITICAL_STATUS_AFTER()) {
             urlSaved.setStatus(Status.CRITICAL);
         }
         urlSaved.setResponseTime((int)responseTime);

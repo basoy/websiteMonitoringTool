@@ -42,6 +42,7 @@ public class GetWebsiteTask implements Runnable{
                 Future website = new CompletableFuture();
                 if (url != null) {
                     Validator validator = new Validator(service, this.url);
+                    validator.setProperties(utils.getProperties());
                     Thread currentThread = Thread.currentThread();
                     utils.setThreadName(currentThread, this.url.getName());
                     while (!currentThread.isInterrupted()) {

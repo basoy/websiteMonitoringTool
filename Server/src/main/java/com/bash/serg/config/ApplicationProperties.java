@@ -18,6 +18,8 @@ public class ApplicationProperties {
     private static final String PROXY_PORT = "proxyPort";
     private static final String USE_PROXY = "useProxy";
     private static final String THREAD_NAME = "threadName";
+    private static final String WARNING_STATUS_FROM = "warningStatusFrom";
+    private static final String CRITICAL_STATUS_AFTER = "criticalStatusAfter";
 
     public String PROXY_HOSTNAME() {
         return environment.getProperty(PROXY_HOSTNAME, String.class);
@@ -33,5 +35,13 @@ public class ApplicationProperties {
 
     public String THREAD_NAME() {
         return environment.getProperty(THREAD_NAME, String.class);
+    }
+
+    public Integer WARNING_STATUS_FROM() {
+        return environment.getProperty(WARNING_STATUS_FROM, Integer.class);
+    }
+
+    public Integer CRITICAL_STATUS_AFTER() {
+        return environment.getProperty(CRITICAL_STATUS_AFTER, Integer.class);
     }
 }

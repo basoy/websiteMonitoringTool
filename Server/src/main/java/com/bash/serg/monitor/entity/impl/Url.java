@@ -28,20 +28,4 @@ public class Url extends BaseEntity {
     private long minResponseSize;
 
     private long maxResponseSize;
-
-//    sites.period.monitoring=600
-//    sites.response.time=15
-//    sites.response.code=200
-
-//* Время ответа сервера (отдельные пороги для OK, WARNING, CRITICAL)
-//
-//* Ожидаемый HTTP response code.
-//    Если сервер возвращает какой-то другой код, статус URL-а должен быть CRITICAL.
-//
-//            * Ожидаемый диапазон размера респонса в байтах (min и max).
-//    Если размер контента выходит за пределы допустимого диапазона, статус URL-а
-//    должен быть CRITICAL.
-//
-//* Опционально - подстрока, которая должна содержаться в респонсе.
-//    Если подстроки нету, статус URL-а должен быть CRITICAL.
 }
