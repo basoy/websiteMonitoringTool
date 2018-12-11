@@ -4,7 +4,7 @@ import com.bash.serg.monitor.dto.UrlResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.CompletableFuture;
@@ -23,7 +23,7 @@ public class GetWebsiteService {
             String result = restTemplate.getForObject(url, String.class);
             urlResponse.setResponseCode(HttpStatus.OK.value());
             urlResponse.setResponseSize(result.length());
-        } catch (HttpServerErrorException e) {
+        } catch (HttpStatusCodeException e) {
             urlResponse.setResponseCode(e.getRawStatusCode());
         }
         urlResponse.setResponseTime(System.currentTimeMillis() - startRequestTime);
