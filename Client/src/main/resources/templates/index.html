@@ -46,7 +46,6 @@
         <table class="table" id="monitoring-table">
             <thead>
             <tr>
-                <th>Id</th>
                 <th>Name</th>
                 <th>Url</th>
                 <th>Period of monitoring</th>
@@ -92,23 +91,21 @@
             var cell9 = row.insertCell(8);
             var cell10 = row.insertCell(9);
             var cell11 = row.insertCell(10);
-            var cell12 = row.insertCell(11);
 
-            cell1.innerHTML = '<td>' + data[i].id + '</td>';
-            cell2.innerHTML = '<td>' + data[i].name + '</td>';
-            cell3.innerHTML = '<td>' + data[i].url + '</td>';
-            cell4.innerHTML = '<td>' + data[i].periodMonitoring + '</td>';
-            cell5.innerHTML = '<td>' + data[i].responseTime + '</td>';
-            cell6.innerHTML = '<td>' + data[i].responseCode + '</td>';
-            cell7.innerHTML = '<td>' + data[i].status + '</td>';
+            cell1.innerHTML = '<td>' + data[i].name + '</td>';
+            cell2.innerHTML = '<td>' + data[i].url + '</td>';
+            cell3.innerHTML = '<td>' + data[i].periodMonitoring + '</td>';
+            cell4.innerHTML = '<td>' + data[i].responseTime + '</td>';
+            cell5.innerHTML = '<td>' + data[i].responseCode + '</td>';
+            cell6.innerHTML = '<td>' + data[i].status + '</td>';
             if(data[i].status === "CRITICAL"){
                 beep();
             }
-            cell8.innerHTML = '<td>' + data[i].subQuery + '</td>';
-            cell9.innerHTML = '<td>' + data[i].minResponseSize + '</td>';
-            cell10.innerHTML = '<td>' + data[i].maxResponseSize + '</td>';
-            cell11.innerHTML = '<td>' + data[i].version + '</td>';
-            cell12.innerHTML = '<td>' + data[i].lastModifiedDate + '</td>';
+            cell7.innerHTML = '<td>' + data[i].subQuery + '</td>';
+            cell8.innerHTML = '<td>' + data[i].minResponseSize + '</td>';
+            cell9.innerHTML = '<td>' + data[i].maxResponseSize + '</td>';
+            cell10.innerHTML = '<td>' + data[i].version + '</td>';
+            cell11.innerHTML = '<td>' + data[i].lastModifiedDate + '</td>';
         }
     }
 

@@ -26,39 +26,35 @@ public class Validator {
     }
 
     private void validateResponseCode(int responseCode) {
-        Url urlSaved = service.findOne(url.getId()).block();
         if (responseCode != HttpStatus.OK.value()) {
-            urlSaved.setStatus(Status.CRITICAL);
+            setCriticalStatus();
         }
-        urlSaved.setResponseCode(responseCode);
-        service.updateUrl(urlSaved).block();//if we return without block() -we get not last information
     }
 
     private void validateSubQuery() {
         if (url.getSubQuery() == null) {
-            Url urlSaved = service.findOne(url.getId()).block();
-            urlSaved.setStatus(Status.CRITICAL);
-            service.updateUrl(urlSaved).block();
+            setCriticalStatus();
         }
     }
 
     private void validateSizeContent(long responseSize) {
-        if ((byte)responseSize > url.getMaxResponseSize() || (byte)responseSize < url.getMinResponseSize()) {
-            Url urlSaved = service.findOne(url.getId()).block();
-            urlSaved.setStatus(Status.CRITICAL);
-            service.updateUrl(urlSaved).block();
+        if ((byte) responseSize > url.getMaxResponseSize() || (byte) responseSize < url.getMinResponseSize()) {
+            setCriticalStatus();
         }
     }
 
     private void validateResponseTime(long responseTime) {
-        Url urlSaved = service.findOne(url.getId()).block();
-        if (responseTime > 0 && responseTime <= properties.WARNING_STATUS_FROM()) {
-            urlSaved.setStatus(Status.WARNING);
-        } else if (responseTime > properties.CRITICAL_STATUS_AFTER()) {
-            urlSaved.setStatus(Status.CRITICAL);
-        }
-        urlSaved.setResponseTime((int)responseTime);
-        service.updateUrl(urlSaved).block();
+        service.findOne(url.getId()).subscribe(urlValidated -> {
+            if (responseTime > 0 && responseTime < properties.WARNING_STATUS_FROM()) {
+                urlValidated.setStatus(Status.OK);
+            } else if (responseTime > properties.WARNING_STATUS_FROM() && responseTime < properties.CRITICAL_STATUS_AFTER()) {
+                urlValidated.setStatus(Status.WARNING);
+            } else if (responseTime > properties.CRITICAL_STATUS_AFTER()) {
+                urlValidated.setStatus(Status.CRITICAL);
+            }
+            urlValidated.setResponseTime((int) responseTime);
+            service.updateUrl(urlValidated).subscribe();
+        });
     }
 
     public void initialValidation(UrlResponse url){
@@ -66,5 +62,13 @@ public class Validator {
         validateSubQuery();
         validateSizeContent(url.getResponseSize());
         validateResponseTime(url.getResponseTime());
+    }
+
+    private void setCriticalStatus() {
+        service.findOne(url.getId()).subscribe
+                (urlWithCritical -> {
+                    urlWithCritical.setStatus(Status.CRITICAL);
+                    service.updateUrl(urlWithCritical).subscribe();
+                });
     }
 }
