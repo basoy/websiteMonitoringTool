@@ -2,17 +2,19 @@ package com.bash.serg.util;
 
 import com.bash.serg.config.ApplicationProperties;
 import com.bash.serg.monitor.entity.impl.Url;
-import com.bash.serg.task.GetWebsiteTask;
-import com.bash.serg.task.TaskManager;
+import com.bash.serg.monitor.service.UrlService;
+import com.bash.serg.monitor.service.impl.GetWebsiteService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 
-import java.util.Set;
+import java.time.Duration;
 
 @Component
 @Import(ApplicationProperties.class)
+@Slf4j
 public class MonitoringUtils {
 
     private final ApplicationProperties properties;
@@ -21,57 +23,28 @@ public class MonitoringUtils {
         this.properties = properties;
     }
 
-    private GetWebsiteTask getWebsiteTask;
-
-    private TaskManager taskManager;
+    @Autowired
+    private GetWebsiteService getWebsiteService;
 
     @Autowired
-    public void setTaskManager(TaskManager taskManager) {
-        this.taskManager = taskManager;
-    }
+    MonitoringUtils utils;
 
-    @Lookup
-    public GetWebsiteTask getGetWebsiteTask(){
-        return null;
-    }
+    @Autowired
+    private UrlService service;
 
-    public void deleteWebsiteFromMonitoring(String threadName){
-        Set<Thread> threads = Thread.getAllStackTraces().keySet();
+    public void addWebsiteToMonitoring(Url url){
+        if (url != null) {
+            Validator validator = new Validator(service, url);
+            validator.setProperties(utils.getProperties());
+            String urlFull = url.getUrl() + url.getSubQuery();
+//            Flux.fromStream(Stream.generate(() -> true).peek((msg) -> getWebsiteService.getWebsiteStatus(urlFull).subscribe(validator::initialValidation)))
+//                    .delayElements(Duration.ofMillis(url.getPeriodMonitoring()))
+//                    .subscribe();
 
-        for(Thread thread : threads){
-            if(thread.getName().equals(getThreadName(threadName))){
-                thread.interrupt();
-            }
+            Flux.from(Flux.generate(x -> x.next(getWebsiteService.getWebsiteStatus(urlFull).subscribe(validator::initialValidation))))
+                    .delayElements(Duration.ofMillis(url.getPeriodMonitoring()))
+                    .subscribe();
         }
-    }
-
-    public void deleteAllWebsitesFromMonitoring(){
-        Set<Thread> threads = Thread.getAllStackTraces().keySet();
-
-        for(Thread thread : threads){
-            if(thread.getName().contains(getThreadName())){
-                thread.interrupt();
-            }
-        }
-    }
-
-    public void addWebsiteToMonitoring(Url url) {
-        getWebsiteTask = getGetWebsiteTask();
-        getWebsiteTask.setUrl(url);
-        taskManager.setTask(getWebsiteTask);
-        taskManager.startNewTask();
-    }
-
-    public void setThreadName(Thread thread, String threadName){
-        thread.setName(properties.THREAD_NAME() + threadName);
-    }
-
-    public String getThreadName(String threadName){
-        return getThreadName() + threadName;
-    }
-
-    public String getThreadName(){
-        return properties.THREAD_NAME();
     }
 
     public ApplicationProperties getProperties() {
