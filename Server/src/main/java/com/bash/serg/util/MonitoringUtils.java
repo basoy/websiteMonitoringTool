@@ -27,15 +27,12 @@ public class MonitoringUtils {
     private GetWebsiteService getWebsiteService;
 
     @Autowired
-    MonitoringUtils utils;
-
-    @Autowired
     private UrlService service;
 
     public void addWebsiteToMonitoring(Url url){
         if (url != null) {
             Validator validator = new Validator(service, url);
-            validator.setProperties(utils.getProperties());
+            validator.setProperties(getProperties());
             String urlFull = url.getUrl() + url.getSubQuery();
 //            Flux.fromStream(Stream.generate(() -> true).peek((msg) -> getWebsiteService.getWebsiteStatus(urlFull).subscribe(validator::initialValidation)))
 //                    .delayElements(Duration.ofMillis(url.getPeriodMonitoring()))

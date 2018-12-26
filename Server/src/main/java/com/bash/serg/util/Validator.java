@@ -20,15 +20,18 @@ public class Validator {
 
     private Url url;
 
-    public Validator(UrlService service, Url url) {
+    Validator(UrlService service, Url url) {
         this.service = service;
         this.url = url;
     }
 
     private void validateResponseCode(int responseCode) {
-        if (responseCode != HttpStatus.OK.value()) {
-            setCriticalStatus();
-        }
+        service.findOne(url.getId()).subscribe
+                (urlResponse -> {
+                    urlResponse.setStatus(responseCode != HttpStatus.OK.value() ? Status.CRITICAL : Status.OK);
+                    urlResponse.setResponseCode(responseCode);
+                    service.updateUrl(urlResponse).subscribe();
+                });
     }
 
     private void validateSubQuery() {
@@ -57,7 +60,7 @@ public class Validator {
         });
     }
 
-    public void initialValidation(UrlResponse url){
+    public void initialValidation(UrlResponse url) {
         validateResponseCode(url.getResponseCode());
         validateSubQuery();
         validateSizeContent(url.getResponseSize());

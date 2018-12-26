@@ -6,7 +6,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
-import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.net.InetAddress;
 import java.net.URI;
@@ -20,7 +20,7 @@ public class GetWebsiteService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public Flux<UrlResponse> getWebsiteStatus(String url){
+    public Mono<UrlResponse> getWebsiteStatus(String url) {
         UrlResponse urlResponse = new UrlResponse();
         long startRequestTime = System.currentTimeMillis();
         try {
@@ -35,12 +35,12 @@ public class GetWebsiteService {
             ResponseEntity<String> exchange = restTemplate.exchange(u.toString(), HttpMethod.GET, entity, String.class);
             urlResponse.setResponseCode(HttpStatus.OK.value());
             urlResponse.setResponseSize(exchange.getBody().length());
-        } catch (URISyntaxException | UnknownHostException e){
+        } catch (URISyntaxException | UnknownHostException e) {
             e.printStackTrace();
         } catch (HttpStatusCodeException e) {
             urlResponse.setResponseCode(e.getRawStatusCode());
         }
         urlResponse.setResponseTime(System.currentTimeMillis() - startRequestTime);
-        return Flux.just(urlResponse);
+        return Mono.just(urlResponse);
     }
 }
