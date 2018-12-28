@@ -23,11 +23,6 @@ public class AppConfiguration {
     }
 
     @Bean
-    public Executor executor() {
-        return Executors.newCachedThreadPool();
-    }
-
-    @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }

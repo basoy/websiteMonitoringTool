@@ -28,14 +28,14 @@ public class UrlServiceImpl implements UrlService {
 
     @Override
     public Mono<Url> createUrl(Url url) {
-        utils.addWebsiteToMonitoring(url);
+        Mono<Url> savedUrl = repository.insert(url);
+        savedUrl.subscribe(u -> utils.addWebsiteToMonitoring(u));
 
-        return repository.insert(url);
+        return savedUrl;
     }
 
     @Override
     public Flux<Url> delete(String name) {
-        utils.deleteWebsiteFromMonitoring(name);
 
         return repository.deleteByName(name).doOnError(Throwable::getMessage);
     }
@@ -60,7 +60,6 @@ public class UrlServiceImpl implements UrlService {
 
     @Override
     public Mono<Void> deleteAll(){
-        utils.deleteAllWebsitesFromMonitoring();
 
         return repository.deleteAll();
     }
