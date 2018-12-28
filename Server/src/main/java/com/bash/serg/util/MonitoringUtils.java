@@ -42,7 +42,7 @@ public class MonitoringUtils {
 
             Flux.from(Flux.generate(websiteThread -> websiteThread.next(websiteService.getWebsiteStatus(url.getUrl() + url.getSubQuery())
                     .subscribe(urlResponse -> {
-                        statusValidator.validate(urlResponse);
+                        url.setStatus(statusValidator.validate(urlResponse));
                         url.setResponseCode(urlResponse.getResponseCode());
                         url.setResponseTime((int) urlResponse.getResponseTime());
                         service.updateUrl(url).subscribe();
