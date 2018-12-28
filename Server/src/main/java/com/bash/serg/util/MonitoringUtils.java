@@ -3,7 +3,7 @@ package com.bash.serg.util;
 import com.bash.serg.config.ApplicationProperties;
 import com.bash.serg.monitor.entity.impl.Url;
 import com.bash.serg.monitor.service.UrlService;
-import com.bash.serg.monitor.service.impl.GetWebsiteService;
+import com.bash.serg.monitor.service.impl.WebsiteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
@@ -24,21 +24,29 @@ public class MonitoringUtils {
     }
 
     @Autowired
-    private GetWebsiteService getWebsiteService;
+    private WebsiteService websiteService;
 
     @Autowired
     private UrlService service;
 
-    public void addWebsiteToMonitoring(Url url){
+    public void addWebsiteToMonitoring(Url url){//todo:optional
         if (url != null) {
-            Validator validator = new Validator(service, url);
-            validator.setProperties(getProperties());
-            String urlFull = url.getUrl() + url.getSubQuery();
-//            Flux.fromStream(Stream.generate(() -> true).peek((msg) -> getWebsiteService.getWebsiteStatus(urlFull).subscribe(validator::initialValidation)))
-//                    .delayElements(Duration.ofMillis(url.getPeriodMonitoring()))
-//                    .subscribe();
+            StatusValidator statusValidator = new StatusValidator(url);
+            statusValidator.setProperties(getProperties());
+            //Blocking(not asynchronous code)???
+//            Flux.fromStream(Stream.generate(() -> true).peek((msg) ->
+//                    getWebsiteService.getWebsiteStatus(url.getUrl() + url.getSubQuery())
+//                        .subscribe(statusValidator::validate)))
+//                        .delayElements(Duration.ofMillis(url.getPeriodMonitoring()))
+//                        .subscribe();
 
-            Flux.from(Flux.generate(x -> x.next(getWebsiteService.getWebsiteStatus(urlFull).subscribe(validator::initialValidation))))
+            Flux.from(Flux.generate(websiteThread -> websiteThread.next(websiteService.getWebsiteStatus(url.getUrl() + url.getSubQuery())
+                    .subscribe(urlResponse -> {
+                        statusValidator.validate(urlResponse);
+                        url.setResponseCode(urlResponse.getResponseCode());
+                        url.setResponseTime((int) urlResponse.getResponseTime());
+                        service.updateUrl(url).subscribe();
+                    }))))
                     .delayElements(Duration.ofMillis(url.getPeriodMonitoring()))
                     .subscribe();
         }

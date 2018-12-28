@@ -15,7 +15,7 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 
 @Service
-public class GetWebsiteService {
+public class WebsiteService {
 
     @Autowired
     private RestTemplate restTemplate;
@@ -34,7 +34,7 @@ public class GetWebsiteService {
 
             ResponseEntity<String> exchange = restTemplate.exchange(u.toString(), HttpMethod.GET, entity, String.class);
             urlResponse.setResponseCode(HttpStatus.OK.value());
-            urlResponse.setResponseSize(exchange.getBody().length());
+            urlResponse.setResponseSize(exchange.getBody().length());//todo:add optional
         } catch (URISyntaxException | UnknownHostException e) {
             e.printStackTrace();
         } catch (HttpStatusCodeException e) {

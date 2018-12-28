@@ -69,6 +69,7 @@
 
 <script>
     var evtSource = new EventSource("http://localhost:8080");
+    //var evtSource = new EventSource("http://${@environment.getProperty('listening.hostname')}:${@environment.getProperty('listening.port')}", {withCredentials: true});
     evtSource.onmessage = function (event) {
         var data = JSON.parse(event.data);
         var table = document.getElementById("monitoring-table");
