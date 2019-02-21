@@ -43,9 +43,9 @@ class StatusValidator {
     }
 
     private Status validateResponseTime(long responseTime) {
-        if (responseTime > 0 && responseTime < properties.WARNING_STATUS_FROM()) {
+        if (responseTime > 0 && responseTime < properties.warningStatusFrom()) {
             return Status.OK;
-        } else if (responseTime > properties.WARNING_STATUS_FROM() && responseTime < properties.CRITICAL_STATUS_AFTER()) {
+        } else if (responseTime > properties.warningStatusFrom() && responseTime < properties.criticalStatusAfter()) {
             return Status.WARNING;
         } else {
             return Status.CRITICAL;
